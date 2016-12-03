@@ -1,0 +1,2 @@
+Open the command prompt, navigate to this folder, and run "python setup.py build" and "python setup.py install"
+Then just import "minecraftmap" whenever you need it in python3
