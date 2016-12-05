@@ -1,3 +1,4 @@
+This code will be used for Minecraft Mapes
 Simple Python 3 editor for Minecraft Maps in NBT format. Allows editing the map image with the Python Image Library or by editing bytes in the native format. 
 
 The Map class defined in the module provides convenient reading and writing of minecraft map nbt data using Thomas Woolford's nbt library. 
