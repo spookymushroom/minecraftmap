@@ -7,5 +7,3 @@ Maps are initiated with the filename of the nbt map file and optionally with eco
 
 Requires PIL and Thomas Woolford's NBT library.
 Includes Andrew Tyler's Minecraftia font.
-
-Testing :P
