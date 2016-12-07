@@ -51,7 +51,7 @@ class Map():
         nbtfile = nbt.NBTFile()
         colors = nbt.TAG_Byte_Array(name="colors")
         colors.value = bytes(16384)
-        data = nbt.TAG_Compound(name="data")
+        data = nbt.TAG_Compound()
         data.name = "data"
         data.tags = [
             nbt.TAG_Int(value=0, name="zCenter"),
@@ -97,7 +97,7 @@ class Map():
     def saveimagebmp(self,filename):
         '''Saves self.im as a bmp'''
         self.im.save(filename)
-
+    
     def saveimagepng(self,filename):
         '''Saves self.im as png'''
         self.im.save(filename,"PNG")
