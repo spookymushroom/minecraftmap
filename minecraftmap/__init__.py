@@ -10,20 +10,30 @@ class ColorError(Exception):
         self.msg = "Could not map color to nbt value: "+str(color)
         super(ColorError,self).__init__(self.msg)
 
+
+
 class Map():
-    def __init__(self,filename,eco=False):
+    def __init__(self,filename=None,eco=False):
         '''Map class containing nbt data and a PIL Image object, with read/write functionality. Eco means the Image object is not written to upon initialization.'''
-        self.file = nbt.NBTFile(filename)
+        
+        if filename:
+            self.file = nbt.NBTFile(filename)
+        else:
+            self.file = self.gendefaultnbt()
+        
         self.height = self.file["data"]["height"].value
         self.width = self.file["data"]["width"].value
         self.centerxz = (self.file["data"]["xCenter"].value, self.file["data"]["zCenter"].value)
         self.zoomlevel = self.file["data"]["scale"].value
         self.pixelcenterxy = (self.width/2, self.height/2)
         self.scalemultiplier = self.zoomlevel ** 2
-        self.gencolors()
         self.im = Image.new("RGB",(self.width,self.height))
         self.draw = ImageDraw.Draw(self.im)
+        self.gencolors()
+        
         if not eco: self.genimage()
+    
+    
     
     basecolors = [(0, 0, 0), (127, 178, 56), (247, 233, 163), (199, 199, 199),
         (255, 0, 0), (160, 160, 255), (167, 167, 167), (0, 124, 0),
@@ -36,6 +46,25 @@ class Map():
         (74, 128, 255), (0, 217, 58), (129, 86, 49), (112, 2, 0)]
     
     font = ImageFont.truetype(fontpath,8)
+    
+    def gendefaultnbt(self):
+        nbtfile = nbt.NBTFile()
+        colors = nbt.TAG_Byte_Array(name="colors")
+        colors.value = bytes(16384)
+        data = nbt.TAG_Compound(name="data")
+        data.name = "data"
+        data.tags = [
+            nbt.TAG_Int(value=0, name="zCenter"),
+            nbt.TAG_Byte(value=1, name="trackingPosition"),
+            nbt.TAG_Short(value=128, name="width"),
+            nbt.TAG_Byte(value=1, name="scale"),
+            nbt.TAG_Byte(value=0, name="dimension"),
+            nbt.TAG_Int(value=64, name="xCenter"),
+            colors,
+            nbt.TAG_Short(value=128, name="height")
+            ]
+        nbtfile.tags.append(data)
+        return nbtfile
     
     
     def gencolors(self):
@@ -50,7 +79,7 @@ class Map():
                 newcolor = (r(c[0]*m/255), r(c[1]*m/255), r(c[2]*m/255))
                 self.allcolors.append(newcolor)
                 self.allcolorsinversemap[newcolor] = i*4 + n
-
+    
     def genimage(self):
         '''updates self.im'''
         colordata = self.file["data"]["colors"].value
@@ -61,7 +90,8 @@ class Map():
         '''updates self.file to match self.im'''
         rgbdata = self.im.getdata()
         try: colordata = bytearray([self.allcolorsinversemap[c] for c in rgbdata])
-        except KeyError as e: raise ColorError(e.args[0])
+        except KeyError as e:
+            raise ColorError(e.args[0])
         self.file["data"]["colors"].value = colordata
     
     def saveimagebmp(self,filename):
@@ -111,3 +141,15 @@ class Map():
         blockshiftxz = (blockshiftxy[0],blockshiftxy[1])
         blockxz = (blockshiftxz[0]+self.centerxz[0],blockshiftxz[1]+self.centerxz[1])
         return blockxz
+
+    def approximate(self,color):
+        '''wip, supposed to return best approximation of color'''
+        bestdist = 500
+        bestcolor = (0,0,0)
+        for c in self.allcolors:
+            d=((color[0]-c[0])**2+(color[1]-c[1])**2+(color[2]-c[2])**2)**.5
+            if d < bestdist:
+                bestdist = d
+                bestcolor = c
+        print(d)
+        return bestcolor
