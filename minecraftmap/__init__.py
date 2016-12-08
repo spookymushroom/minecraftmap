@@ -1,6 +1,7 @@
 from nbt import nbt
 from PIL import Image,ImageDraw,ImageFont
 from os import path
+from functools import partial
 
 fontpath = path.join(path.dirname(__file__), "minecraftia", "Minecraftia.ttf")
 
@@ -86,10 +87,15 @@ class Map():
         rgbdata = [self.allcolors[v] for v in colordata]
         self.im.putdata(rgbdata)
     
-    def imagetonbt(self):
-        '''updates self.file to match self.im'''
+    def imagetonbt(self,approximate=True):
+        '''updates self.file to match self.im, approximations work but take very long'''
         rgbdata = self.im.getdata()
-        try: colordata = bytearray([self.allcolorsinversemap[c] for c in rgbdata])
+        try:
+            if approximate:
+                colordata = bytearray([self.approximate(c) for c in rgbdata])
+            else:
+                colordata = bytearray([self.allcolorsinversemap[c] for c in rgbdata])
+            
         except KeyError as e:
             raise ColorError(e.args[0])
         self.file["data"]["colors"].value = colordata
@@ -141,15 +147,18 @@ class Map():
         blockshiftxz = (blockshiftxy[0],blockshiftxy[1])
         blockxz = (blockshiftxz[0]+self.centerxz[0],blockshiftxz[1]+self.centerxz[1])
         return blockxz
-
+    
+    def colordifference(self,testcolor,comparecolor):
+        '''returns rgb distance squared'''
+        d = ((testcolor[0]-comparecolor[0])**2+
+             (testcolor[1]-comparecolor[1])**2+
+             (testcolor[2]-comparecolor[2])**2)
+        return d
+    
     def approximate(self,color):
-        '''wip, supposed to return best approximation of color'''
-        bestdist = 500
-        bestcolor = (0,0,0)
-        for c in self.allcolors:
-            d=((color[0]-c[0])**2+(color[1]-c[1])**2+(color[2]-c[2])**2)**.5
-            if d < bestdist:
-                bestdist = d
-                bestcolor = c
-        print(d)
-        return bestcolor
+        '''wip, supposed to return minecraft color code from rgb'''
+        try:
+            return self.allcolorsinversemap[color]
+        except KeyError:
+            color = min(self.allcolors,key=partial(self.colordifference,color))
+            return self.allcolorsinversemap[color]
