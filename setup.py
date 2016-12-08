@@ -4,12 +4,12 @@ from setuptools import setup
 
 setup(
   name             = 'minecraftmap',
-  version          = '0.1.1',
+  version          = '0.2',
   description      = 'Minecraft Map Reader/Writer',
   author           = 'Michael Korotkov',
   author_email     = 'github.spookymushroom@gmail.com',
   url              = 'https://github.com/spookymushroom/minecraftmap/',
-  download_url     = 'https://github.com/spookymushroom/minecraftmap/tarball/master',
+  download_url     = 'https://github.com/spookymushroom/minecraftmap/tarball/0.2',
   license          = open("LICENSE.txt").read(),
   long_description = open("README.txt").read(),
   include_package_data = True,
