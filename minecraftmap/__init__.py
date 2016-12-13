@@ -159,13 +159,13 @@ class Map():
     
     def approximate(self,color,lookupindex=10):
         '''returns best minecraft color code from rgb,
-        lookupindex refers to constants.estimationlookup and can be None'''    
+        lookupindex refers to constants.estimationlookup and can be None'''
         try:
             if lookupindex in constants.estimationlookup:
                 r,g,b = color[0],color[1],color[2]
-                ri = r*lookupindex//255.0001
-                gi = g*lookupindex//255.0001
-                bi = b*lookupindex//255.0001
+                ri = r*lookupindex//255.001
+                gi = g*lookupindex//255.001
+                bi = b*lookupindex//255.001
                 return constants.estimationlookup[ri][gi][bi]
             else:
                 return self.allcolorsinversemap[color]
