@@ -40,7 +40,10 @@ class Map():
     basecolors = constants.basecolors
     
     allcolors = constants.allcolors
-        
+    
+    #uses estimationlookupdict if True, uses estimationlookup if False
+    uselookupdict = False
+    
     allcolorsinversemap = constants.allcolorsinversemap
     
     font = ImageFont.truetype(fontpath,8)
@@ -161,14 +164,12 @@ class Map():
         '''returns best minecraft color code from rgb,
         lookupindex refers to constants.estimationlookup and can be None'''
         try:
-            if lookupindex in constants.estimationlookup:
-                r,g,b = color[0],color[1],color[2]
-                ri = r*lookupindex//255.001
-                gi = g*lookupindex//255.001
-                bi = b*lookupindex//255.001
-                return constants.estimationlookup[ri][gi][bi]
-            else:
-                return self.allcolorsinversemap[color]
-        except KeyError:
-            color = min(self.allcolors,key=partial(self.colordifference,color))
             return self.allcolorsinversemap[color]
+        except KeyError:
+            if self.uselookupdict and lookupindex in constants.estimationlookupdict:
+                return constants.estimationlookupdict[lookupindex][(color[0]*lookupindex//255,color[1]*lookupindex//255,color[2]*lookupindex//255)]
+            elif not self.uselookupdict and lookupindex in constants.estimationlookup:
+                return constants.estimationlookup[lookupindex][color[0]*lookupindex//255][color[1]*lookupindex//255][color[2]*lookupindex//255]
+            else:
+                color = min(self.allcolors,key=partial(self.colordifference,color))
+                return self.allcolorsinversemap[color]
