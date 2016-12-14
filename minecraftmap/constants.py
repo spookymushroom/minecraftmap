@@ -225,7 +225,7 @@ estimationlookup = {
 estimationlookupdict = {}
 
 def addestimate(n,todict=False):
-    '''adds genestimation(n) to estimationlookup at index n'''
+    '''adds genestimation(n) to estimationlookup or estimationlookupdict at index n'''
     if todict:
         global estimationlookup
         estimationlookup[n] = genestimation(n)
