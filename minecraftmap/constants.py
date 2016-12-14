@@ -224,10 +224,14 @@ estimationlookup = {
 
 estimationlookupdict = {}
 
-def addestimate(n):
+def addestimate(n,todict=False):
     '''adds genestimation(n) to estimationlookup at index n'''
-    global estimationlookup
-    estimationlookup[n] = genestimation(n)
+    if todict:
+        global estimationlookup
+        estimationlookup[n] = genestimation(n)
+    else:
+        global estimationlookupdict
+        estimationlookupdict[n] = genestimationdict(n)
 
 def genestimation(n):
     '''returns a nested list by estimating approximate() on interval n in every axis'''
