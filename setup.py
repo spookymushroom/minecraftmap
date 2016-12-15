@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
   name             = 'minecraftmap',
-  version          = '0.2.5',
+  version          = '0.3',
   description      = 'Minecraft Map Reader/Writer',
   author           = 'Michael Korotkov',
   author_email     = 'github.spookymushroom@gmail.com',
