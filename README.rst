@@ -31,7 +31,7 @@ Usage::
  m.genimage()
  
  # PIL methods, m.font defaults to Andrew Tyler's Minecraftia
- m.draw.rectangle((0,0,128,128),fill=(56,58,89))
+ m.draw.rectangle((0,0,30,30),fill=(56,58,89))
  m.draw.text((40,40),"testing",font=m.font)
  
  # Save Map.im (The PIL.Image object) to a file
