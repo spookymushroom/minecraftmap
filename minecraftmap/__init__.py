@@ -124,7 +124,8 @@ class Map():
         self.im.save(filename,"PNG")
     
     def saveimagejpg(self,filename):
-        self.im.save(filename,"JPEG")
+        '''Saves self.im as jpg'''
+        self.im.save(filename,"JPEG",quality=100,subsampling=0)
     
     def savenbt(self,filename=None):
         '''Saves nbt data to original file or to specified filename'''
