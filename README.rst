@@ -4,7 +4,6 @@ Minecraft Maps Editor
 
 Simple Python 3 editor for Minecraft maps (the item) in NBT format. Allows editing the map image with the Python Image Library or by editing bytes in the color native format. 
 
----------------------
 
 Usage::
 
@@ -52,7 +51,7 @@ Usage::
  print(m.file.filename)
  m.savenbt()
 
----------------------
+
 
 :Requires: Thomas Woolford's NBT library
 :Requires: Python Image Library (Pillow)
