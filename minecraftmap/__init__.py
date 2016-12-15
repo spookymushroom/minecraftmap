@@ -52,7 +52,7 @@ class Map():
         '''returns an nbt object'''
         nbtfile = nbt.NBTFile()
         colors = nbt.TAG_Byte_Array(name="colors")
-        colors.value = bytes(16384)
+        colors.value = bytearray(16384)
         data = nbt.TAG_Compound()
         data.name = "data"
         data.tags = [
@@ -118,7 +118,9 @@ class Map():
     
     def savenbt(self,filename=None):
         '''Saves nbt data to original file or to specified filename'''
-        self.file.write_file(filename)
+        if filename or self.file.filename:
+            self.file.write_file(filename)
+            return True
     
     
     def getbyte(self,index):
