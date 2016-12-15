@@ -31,7 +31,7 @@ Usage::
  # Updates Map.im (PIL) to match Map.file (NBT)
  m.genimage()
  
- # PIL methods
+ # PIL methods, m.font defaults to Andrew Tyler's Minecraftia
  m.draw.rectangle((0,0,128,128),fill=(56,58,89))
  m.draw.text((40,40),"testing",font=m.font)
  
