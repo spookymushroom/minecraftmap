@@ -4,14 +4,14 @@ from setuptools import setup
 
 setup(
   name             = 'minecraftmap',
-  version          = '0.2',
+  version          = '0.2.1',
   description      = 'Minecraft Map Reader/Writer',
   author           = 'Michael Korotkov',
   author_email     = 'github.spookymushroom@gmail.com',
   url              = 'https://github.com/spookymushroom/minecraftmap/',
   download_url     = 'https://github.com/spookymushroom/minecraftmap/tarball/0.2',
   license          = open("LICENSE.txt").read(),
-  long_description = open("README.txt").read(),
+  long_description = open("README.rst").read(),
   include_package_data = True,
   packages         = ["minecraftmap"],
   install_requires = ["Pillow","nbt"],
