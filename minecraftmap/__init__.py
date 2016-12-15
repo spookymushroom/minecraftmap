@@ -33,6 +33,8 @@ class Map():
         self.im = Image.new("RGB",(self.width,self.height))
         self.draw = ImageDraw.Draw(self.im)
         
+        if constants.alphacolor != self.alphacolor:
+            self.gencolors()
         if not eco: self.genimage()
     
     
@@ -40,6 +42,8 @@ class Map():
     basecolors = constants.basecolors
     
     allcolors = constants.allcolors
+    
+    alphacolor = constants.alphacolor
     
     #uses estimationlookupdict if True, uses estimationlookup if False
     uselookupdict = False
@@ -70,17 +74,23 @@ class Map():
     
     
     def gencolors(self):
-        '''sets allcolors list and allcolorsinversemap to match basecolors'''
+        '''sets allcolors list and allcolorsinversemap to match basecolors,
+        and updates all of them to match alphacolor'''
+        self.basecolors[0] = self.alphacolor
         self.allcolors = []
         self.allcolorsinversemap = {}
         for i in range(len(self.basecolors)):
             r = round
-            c = self.basecolors[i]
-            for n in range(4):
-                m = (180,220,255,135)[n]
-                newcolor = (r(c[0]*m/255), r(c[1]*m/255), r(c[2]*m/255))
-                self.allcolors.append(newcolor)
-                self.allcolorsinversemap[newcolor] = i*4 + n
+            if i == 0:
+                    self.allcolors.extend([self.alphacolor]*4)
+                    self.allcolorsinversemap[self.alphacolor] = 3
+            else:
+                c = self.basecolors[i]
+                for n in range(4):
+                    m = (180,220,255,135)[n]
+                    newcolor = (r(c[0]*m/255), r(c[1]*m/255), r(c[2]*m/255))
+                    self.allcolors.append(newcolor)
+                    self.allcolorsinversemap[newcolor] = i*4 + n
     
     def genimage(self):
         '''updates self.im'''
@@ -89,8 +99,8 @@ class Map():
         self.im.putdata(rgbdata)
     
     def imagetonbt(self,approximate=True,optimized=True,lookupindex=10):
-        '''updates self.file to match self.im, approximations work but take very long
-        optimization with constants.estimationlookup[lookupindex] is faster but imperfect'''
+        '''updates self.file to match self.im, approximations work but take very long, 
+        optimization with constants.estimationlookup[lookupindex] is fast but imperfect'''
         rgbdata = self.im.getdata()
         try:
             if approximate:
@@ -120,7 +130,6 @@ class Map():
         '''Saves nbt data to original file or to specified filename'''
         if filename or self.file.filename:
             self.file.write_file(filename)
-            return True
     
     
     def getbyte(self,index):
