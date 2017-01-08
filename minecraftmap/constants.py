@@ -1,4 +1,10 @@
 from functools import partial
+from PIL import ImageFont
+from os import path
+
+minecraftiafontpath = path.join(path.dirname(__file__), "minecraftia", "Minecraftia.ttf")
+minecraftiafont = ImageFont.truetype(minecraftiafontpath,8)
+
 
 alphacolor = (0,0,0)
 
