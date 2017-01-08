@@ -1,6 +1,5 @@
 from nbt import nbt
-from PIL import Image,ImageDraw,ImageFont
-from os import path
+from PIL import Image,ImageDraw
 from functools import partial
 
 from . import constants
@@ -24,6 +23,12 @@ class Map():
         else:
             self.file = self.gendefaultnbt()
         
+        self.basecolors = constants.basecolors
+        self.allcolors = constants.allcolors
+        self.alphacolor = constants.alphacolor
+        self.allcolorsinversemap = constants.allcolorsinversemap
+        self.font = constants.minecraftiafont
+        
         self.height = self.file["data"]["height"].value
         self.width = self.file["data"]["width"].value
         self.centerxz = (self.file["data"]["xCenter"].value, self.file["data"]["zCenter"].value)
@@ -39,18 +44,14 @@ class Map():
     
     
     
-    basecolors = constants.basecolors
     
-    allcolors = constants.allcolors
     
-    alphacolor = constants.alphacolor
+    
     
     #uses estimationlookupdict if True, uses estimationlookup if False
     uselookupdict = False
     
-    allcolorsinversemap = constants.allcolorsinversemap
     
-    font = ImageFont.truetype(fontpath,8)
     
     def gendefaultnbt(self):
         '''returns an nbt object'''
